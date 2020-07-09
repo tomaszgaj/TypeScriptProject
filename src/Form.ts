@@ -1,25 +1,55 @@
-import Filed from "./Field";
+import Field from "./Field";
+import { LocStorage } from "./LocStorage";
 
 
 
-class Form
+export default class Form
 {
-    fields: Filed[];
+    fields: Field[];
+    private _locaStorage: LocStorage;
 
-    constructor(fields: Filed[]){
+    constructor(fields: Field[]){
 
         this.fields = fields;
+        this._locaStorage = new LocStorage();
         
+    }
+
+
+    save(): void {
+        this._locaStorage.saveDocument();
+        location.href = '/';
     }
 
     render(): HTMLElement {
 
-        let div =   document.createElement("div");
+        const div = document.createElement("div");
         for(let i = 0; i < this.fields.length; i++ ){
-            let input = this.fields[i].render();
+            const input = this.fields[i].render();
             div.appendChild(input);
+    
         }
+
+        const submitButton: HTMLButtonElement = document.createElement('button');
+        submitButton.type = 'submit';
+        submitButton.addEventListener('click', () => {
+            this.save();
+        });
+        
+        const backButton: HTMLButtonElement = document.createElement('button');
+        backButton.addEventListener('click', () => {
+            history.back();
+        });
+
+        div.appendChild(backButton);
+        div.appendChild(submitButton);
+        
         return div;
+        
     }
+
+    
+
+    getValue(): void {};
 
 }
